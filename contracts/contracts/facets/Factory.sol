@@ -74,7 +74,7 @@ function create(MarketCreationParams calldata param) external{
 
 
 function bet(uint256 marketId, uint256 choiceId, uint256 price, bool side, uint256 amount) external  whenNotPaused nonReentrant payable{
-    //LibSettings.Layout storage settingsLib = LibSettings.layout();
+    LibSettings.Layout storage settingsLib = LibSettings.layout();
     LibMarket.Layout storage marketLib = LibMarket.layout();
 
     require(marketId < marketLib.markets.length, InvalidMarket());
@@ -89,7 +89,7 @@ function bet(uint256 marketId, uint256 choiceId, uint256 price, bool side, uint2
 
 
     MarketChoice storage choice = market.choices[choiceId];
-    if(choice.tokenAddress == address(0)){
+    if(choice.tokenAddress == settingsLib.ETHER){
         require(msg.value == amount,InvalidAmount());
     }else{
         TransferHelper.safeTransferFrom(choice.tokenAddress,msg.sender,address(this),amount);

@@ -15,6 +15,7 @@ error InvalidAmount();
 error InvalidMarket();
 error MarketHasNotStartedYet();
 error MarketHasAlreadyExpired();
+error MarketHasAlreadyResolved();
 error MarketHasCancelled();
 error MarketIsNotCancelled();
 error MarketIsCancelled();
@@ -26,7 +27,7 @@ error AlreadyRefunded();
 
 event MarketCreated(uint256 indexed marketId, address indexed creator, string title);
 event BetPlaced(uint256 indexed marketId, uint256 indexed choiceId, uint256 betId, bool side, address indexed bettor, uint256 amount, uint256 price);
-event WinnerDeclared(uint256 indexed marketId, uint256 indexed choiceId, bool winnerSide, uint256 completedAt);
+event Resolved(uint256 indexed marketId, uint256 indexed choiceId, bool winnerSide, uint256 completedAt);
 event MarketCancelled(uint256 indexed marketId, uint256 cancelledAt);
 event Claimed(address indexed user,uint256 indexed marketId,uint256 indexed choiceId,uint256 amount,uint256 protocolFee,uint256 claimedAt);
 event Refunded(address indexed user, uint256 indexed marketId, uint256 indexed choiceId, uint256 amount, uint256 refundedAt);
@@ -39,7 +40,7 @@ function create(MarketCreationParams calldata param) external{
 
     Market storage newMarket = marketLib.markets.push();
     newMarket.valid = true;
-    newMarket.winnerDeclared = false;
+    newMarket.resolved = false;
     newMarket.winnerChoiceId=type(uint256).max;
     newMarket.verified=settingsLib.whiteList[msg.sender];
     newMarket.feePercent=settingsLib.protocolFee;
@@ -82,7 +83,7 @@ function bet(uint256 marketId, uint256 choiceId, uint256 price, bool side, uint2
     require(market.valid,InvalidMarket());
     require(market.startedAt < block.timestamp,MarketHasNotStartedYet());
     require(market.expiredAt > block.timestamp,MarketHasAlreadyExpired());
-    require(market.winnerDeclared,MarketHasAlreadyExpired());
+    require(market.resolved,MarketHasAlreadyResolved());
     require(!market.cancelled,MarketHasCancelled());
     require(amount > 0,InvalidAmount());
     require(price > 0,InvalidPrice());
@@ -135,18 +136,18 @@ function bet(uint256 marketId, uint256 choiceId, uint256 price, bool side, uint2
 
 
 
-function setWinner(uint256 marketId,uint256 choiceId, bool side) external onlyOwner{
+function resolve(uint256 marketId,uint256 choiceId, bool side) external onlyOwner{
     LibMarket.Layout storage marketLib = LibMarket.layout();
     Market storage market = marketLib.markets[marketId];
     market.cancelled = false;
     market.cancelledAt = 0;
     market.completed = true;
     market.completedAt = block.timestamp;
-    market.winnerDeclared = true;
+    market.resolved = true;
     market.winnerSide = side;
     market.winnerChoiceId = choiceId;
     market.status = Status.COMPLETED;
-    emit WinnerDeclared(marketId, choiceId, side, block.timestamp);
+    emit Resolved(marketId, choiceId, side, block.timestamp);
 }
 
 function cancel(uint256 marketId) external onlyOwner{
@@ -273,7 +274,7 @@ function fetchMarketById(uint256 marketId) external view returns(Market memory m
         return market;
     }
 
-    if(market.expiredAt < block.timestamp && !market.winnerDeclared ){
+    if(market.expiredAt < block.timestamp && !market.resolved ){
         market.status = Status.PROCESSING_RESULTS;
         return market;
     }

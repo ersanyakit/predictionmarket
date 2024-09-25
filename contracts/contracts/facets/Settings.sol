@@ -12,10 +12,18 @@ event ProtocolFeeUpdated(uint256 newFee);
 event WETH9Updated(address indexed previousWETH9, address indexed newWETH9);
 event KayenRouterUpdated(address indexed previousKayenRouter, address indexed newKayenRouter);
 event KayenWrapperUpdated(address indexed previousKayenWrapper, address indexed newKayenWrapper);
+event NativeCurrencyUpdated(address indexed previousCurrency, address indexed newCurrency);
 
 function setPause(bool status) external onlyOwner{
     LibSettings.layout().isPaused = status;
     emit PauseStatusUpdated(status);
+}
+
+function setNativeCurrency(address nativeCurrency) external onlyOwner {
+    LibSettings.Layout storage settings = LibSettings.layout();
+    address previousCurrency = settings.ETHER;
+    settings.ETHER = nativeCurrency;
+    emit NativeCurrencyUpdated(previousCurrency, nativeCurrency);
 }
 
 function setWETH9(address weth9) external onlyOwner {

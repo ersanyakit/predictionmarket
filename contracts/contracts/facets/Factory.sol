@@ -178,6 +178,14 @@ function claim(uint256 marketId) external whenNotPaused nonReentrant{
 
     MarketChoice memory winner = market.choices[market.winnerChoiceId];
 
+    if(betInfo.tokenAddress == settingsLib.ETHER){
+        TransferHelper.safeTransferETH(betInfo.bettor,betInfo.depositAmount);
+
+    }else{
+        TransferHelper.safeTransfer(betInfo.tokenAddress,betInfo.bettor,betInfo.depositAmount);
+    }
+
+
     uint256 choicesLength = market.choices.length;
     for(uint256 choiceIndex; choiceIndex < choicesLength;){
         if(choiceIndex == market.winnerChoiceId){
@@ -196,7 +204,7 @@ function claim(uint256 marketId) external whenNotPaused nonReentrant{
                 tokenAddress:loser.tokenAddress
             }));
 
-            if(loser.tokenAddress == address(0)){
+            if(loser.tokenAddress ==  settingsLib.ETHER){
                 // native Currency
                 TransferHelper.safeTransferETH(betInfo.bettor,(totalWinnings-protocolFee));
                 TransferHelper.safeTransferETH(settingsLib.FEE_RECEIVER,protocolFee);
@@ -205,7 +213,7 @@ function claim(uint256 marketId) external whenNotPaused nonReentrant{
                 TransferHelper.safeTransfer(loser.tokenAddress,betInfo.bettor,(totalWinnings-protocolFee));
                 TransferHelper.safeTransfer(loser.tokenAddress,settingsLib.FEE_RECEIVER,protocolFee);
             }
-                emit Claimed(msg.sender, marketId, choiceIndex, totalWinnings, protocolFee, block.timestamp);
+            emit Claimed(msg.sender, marketId, choiceIndex, totalWinnings, protocolFee, block.timestamp);
 
         }
 
@@ -219,6 +227,7 @@ function claim(uint256 marketId) external whenNotPaused nonReentrant{
 
 function refund(uint256 marketId, uint256 choiceId, bool side) external whenNotPaused nonReentrant {
     LibMarket.Layout storage marketLib = LibMarket.layout();
+    LibSettings.Layout storage settingsLib = LibSettings.layout();
     Market storage market = marketLib.markets[marketId];
     require(market.valid,InvalidMarket());
     require(market.cancelled,MarketIsNotCancelled());
@@ -231,12 +240,12 @@ function refund(uint256 marketId, uint256 choiceId, bool side) external whenNotP
     betInfo.refunded = true;
     betInfo.refundAmount = betInfo.depositAmount;
 
-    if(betInfo.asset == address(0)){
+    if(betInfo.tokenAddress == settingsLib.ETHER){
         // native Currency
         TransferHelper.safeTransferETH(betInfo.bettor,betInfo.refundAmount);
     }else{
         //token
-        TransferHelper.safeTransfer(betInfo.asset,betInfo.bettor,betInfo.refundAmount);
+        TransferHelper.safeTransfer(betInfo.tokenAddress,betInfo.bettor,betInfo.refundAmount);
     }
     emit Refunded(msg.sender, marketId, choiceId, betInfo.refundAmount, block.timestamp);
 }
@@ -245,8 +254,39 @@ function fetch() external view returns(Market[] memory){
     return LibMarket.layout().markets;
 }
 
-function fetchMarketById(uint256 marketId) external view returns(Market memory){
-    return LibMarket.layout().markets[marketId];
+function fetchMarketById(uint256 marketId) external view returns(Market memory market){
+    market = LibMarket.layout().markets[marketId];
+    if(market.cancelled){
+        market.status = Status.CANCELLED;
+        return market;
+    }  
+    
+    if(market.completed){
+        market.status = Status.COMPLETED;
+        return market;
+    }
+
+    if(market.startedAt < block.timestamp){
+        market.status = Status.PENDING;
+        return market;
+    }
+
+    if(market.expiredAt < block.timestamp && !market.winnerDeclared ){
+        market.status = Status.PROCESSING_RESULTS;
+        return market;
+    }
+
+    if(market.startedAt > block.timestamp && market.expiredAt > block.timestamp ){
+        market.status = Status.LIVE;
+        return market;
+    }
+
+   if(market.expiredAt < block.timestamp ){
+        market.status = Status.EXPIRED;
+        return market;
+    }
+
+    return market;
 }
 
 function allMarketsLength() external view returns(uint256){

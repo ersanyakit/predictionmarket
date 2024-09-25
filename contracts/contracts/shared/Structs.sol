@@ -81,6 +81,6 @@ struct BetInfo{
     uint256 claimedAt;
     uint256 fee;
     Rewards[] rewards;
-    address asset;// address(0) native currency
+    address tokenAddress;// address(0) native currency
     address bettor;
 }

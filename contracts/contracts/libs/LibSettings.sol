@@ -8,6 +8,7 @@ library LibSettings {
         bool isPaused;
         uint256 protocolFee;
 
+        address ETHER;
         address WETH9;
         address KAYEN_WRAPPER;
         address FEE_RECEIVER;

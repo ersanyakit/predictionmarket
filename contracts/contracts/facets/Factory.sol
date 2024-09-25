@@ -145,6 +145,7 @@ function setWinner(uint256 marketId,uint256 choiceId, bool side) external onlyOw
     market.winnerDeclared = true;
     market.winnerSide = side;
     market.winnerChoiceId = choiceId;
+    market.status = Status.COMPLETED;
     emit WinnerDeclared(marketId, choiceId, side, block.timestamp);
 }
 
@@ -153,6 +154,7 @@ function cancel(uint256 marketId) external onlyOwner{
     Market storage market = marketLib.markets[marketId];
     market.cancelled = true;
     market.cancelledAt = block.timestamp;
+    market.status = Status.CANCELLED;
     emit MarketCancelled(marketId, block.timestamp);
 }
 

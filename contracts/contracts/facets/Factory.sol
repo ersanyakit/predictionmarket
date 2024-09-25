@@ -20,7 +20,6 @@ error MarketHasCancelled();
 error MarketIsNotCancelled();
 error MarketIsCancelled();
 error InvalidBet();
-
 error InvalidPrice();
 error AlreadyClaimed();
 error AlreadyRefunded();
@@ -31,6 +30,7 @@ event Resolved(uint256 indexed marketId, uint256 indexed choiceId, bool winnerSi
 event MarketCancelled(uint256 indexed marketId, uint256 cancelledAt);
 event Claimed(address indexed user,uint256 indexed marketId,uint256 indexed choiceId,uint256 amount,uint256 protocolFee,uint256 claimedAt);
 event Refunded(address indexed user, uint256 indexed marketId, uint256 indexed choiceId, uint256 amount, uint256 refundedAt);
+event MarketVerified(uint256 indexed marketId, bool status);
 
 function create(MarketCreationParams calldata param) external{
     LibSettings.Layout storage settingsLib = LibSettings.layout();
@@ -73,7 +73,6 @@ function create(MarketCreationParams calldata param) external{
     }
     emit MarketCreated(id, msg.sender, param.title);
 }
-
 
 function bet(uint256 marketId, uint256 choiceId, uint256 price, bool side, uint256 amount) external  whenNotPaused nonReentrant payable{
     LibSettings.Layout storage settingsLib = LibSettings.layout();
@@ -135,8 +134,6 @@ function bet(uint256 marketId, uint256 choiceId, uint256 price, bool side, uint2
 
 }
 
-
-
 function resolve(uint256 marketId,uint256 choiceId, bool side) external onlyOwner{
     LibMarket.Layout storage marketLib = LibMarket.layout();
     Market storage market = marketLib.markets[marketId];
@@ -160,7 +157,7 @@ function cancel(uint256 marketId) external onlyOwner{
     emit MarketCancelled(marketId, block.timestamp);
 }
 
-function calculatePercent(uint256 amount, uint256 percent) internal pure returns (uint256){
+function calculate(uint256 amount, uint256 percent) internal pure returns (uint256){
     return percent > 0 ? (amount * percent) / 1e18 : 0;
 }
 
@@ -198,7 +195,7 @@ function claim(uint256 marketId) external whenNotPaused nonReentrant{
         MarketChoice memory loser = market.choices[choiceIndex];
         uint256 totalWinnings = (betInfo.depositAmount * loser.totalDeposit) / winner.totalDeposit;
         if(totalWinnings > 0){
-            uint256 protocolFee = calculatePercent(totalWinnings,settingsLib.protocolFee);
+            uint256 protocolFee = calculate(totalWinnings,settingsLib.protocolFee);
 
             betInfo.rewards.push(Rewards({
                 valid:true,
@@ -297,4 +294,11 @@ function allMarketsLength() external view returns(uint256){
     return LibMarket.layout().markets.length;
 }
 
+function verify(uint256 marketId, bool status) external onlyOwner {
+    LibMarket.Layout storage marketLib = LibMarket.layout();
+    Market storage market = marketLib.markets[marketId];
+    require(market.id > 0, InvalidMarket());
+    market.verified = status;
+    emit MarketVerified(marketId, status); // Emit the event after updating the status
+}
 }

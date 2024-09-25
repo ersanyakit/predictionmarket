@@ -278,7 +278,7 @@ function fetchMarketById(uint256 marketId) external view returns(Market memory m
         return market;
     }
 
-    if(market.startedAt > block.timestamp && market.expiredAt > block.timestamp ){
+    if(market.startedAt < block.timestamp && market.expiredAt > block.timestamp ){
         market.status = Status.LIVE;
         return market;
     }

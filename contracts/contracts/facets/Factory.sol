@@ -41,7 +41,7 @@ function create(MarketCreationParams calldata param) external{
     Market storage newMarket = marketLib.markets.push();
     newMarket.valid = true;
     newMarket.resolved = false;
-    newMarket.winnerChoiceId=type(uint256).max;
+    newMarket.resolvedId=type(uint256).max;
     newMarket.verified=settingsLib.whiteList[msg.sender];
     newMarket.feePercent=settingsLib.protocolFee;
     newMarket.createdAt=block.timestamp;
@@ -56,16 +56,16 @@ function create(MarketCreationParams calldata param) external{
 
     uint256 choicesLen = param.choices.length;
     for(uint256 i=0;i<choicesLen;){
-        MarketChoiceParam calldata choice = param.choices[i];
-        MarketChoice storage choiceDetailed = newMarket.choices.push();
-        choiceDetailed.totalDeposit = 0;
-        choiceDetailed.userCount=0;
-        choiceDetailed.name = choice.name;
-        choiceDetailed.tokenAddress = choice.tokenAddress;
-        choiceDetailed.maxBet = 0;
-        choiceDetailed.minBet = type(uint256).max;
-        choiceDetailed.minPrice = type(uint256).max;
-        choiceDetailed.maxPrice = 0;
+        MarketChoiceParam calldata choiceParam = param.choices[i];
+        MarketChoice storage choice = newMarket.choices.push();
+        choice.totalDeposit = 0;
+        choice.userCount=0;
+        choice.name = choiceParam.name;
+        choice.tokenAddress = choiceParam.tokenAddress;
+        choice.maxBet = 0;
+        choice.minBet = type(uint256).max;
+        choice.minPrice = type(uint256).max;
+        choice.maxPrice = 0;
         unchecked{
             i++;
         }
@@ -144,8 +144,8 @@ function resolve(uint256 marketId,uint256 choiceId, bool side) external onlyOwne
     market.completed = true;
     market.completedAt = block.timestamp;
     market.resolved = true;
-    market.winnerSide = side;
-    market.winnerChoiceId = choiceId;
+    market.side = side;
+    market.resolvedId = choiceId;
     market.status = Status.COMPLETED;
     emit Resolved(marketId, choiceId, side, block.timestamp);
 }
@@ -172,14 +172,14 @@ function claim(uint256 marketId) external whenNotPaused nonReentrant{
 
 
     //userbetInfo
-    BetInfo storage betInfo = marketLib.betInfo[msg.sender][marketId][market.winnerChoiceId][market.winnerSide];
+    BetInfo storage betInfo = marketLib.betInfo[msg.sender][marketId][market.resolvedId][market.side];
     require(!betInfo.claimed,AlreadyClaimed());
     require(betInfo.depositAmount > 0,InvalidAmount());
 
     betInfo.claimed = true;
     betInfo.claimedAt = block.timestamp;
 
-    MarketChoice memory winner = market.choices[market.winnerChoiceId];
+    MarketChoice memory winner = market.choices[market.resolvedId];
 
     if(betInfo.tokenAddress == settingsLib.ETHER){
         TransferHelper.safeTransferETH(betInfo.bettor,betInfo.depositAmount);
@@ -191,7 +191,7 @@ function claim(uint256 marketId) external whenNotPaused nonReentrant{
 
     uint256 choicesLength = market.choices.length;
     for(uint256 choiceIndex; choiceIndex < choicesLength;){
-        if(choiceIndex == market.winnerChoiceId){
+        if(choiceIndex == market.resolvedId){
             continue;   
         }
         MarketChoice memory loser = market.choices[choiceIndex];

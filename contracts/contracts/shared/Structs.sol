@@ -43,10 +43,10 @@ struct Market {
     bool cancelled;
     bool verified;
     bool resolved; // Kazanan belirlendi mi?
-    bool winnerSide;//yes no 
+    bool side;//yes no 
     bool completed;
     uint256 id;
-    uint256 winnerChoiceId; // Kazanan seçimin indeksini saklar
+    uint256 resolvedId; // Kazanan seçimin indeksini saklar
     uint256 feePercent;
     uint256 startedAt;
     uint256 createdAt;

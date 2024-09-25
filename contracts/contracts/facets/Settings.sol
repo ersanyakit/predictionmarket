@@ -13,10 +13,18 @@ event WETH9Updated(address indexed previousWETH9, address indexed newWETH9);
 event KayenRouterUpdated(address indexed previousKayenRouter, address indexed newKayenRouter);
 event KayenWrapperUpdated(address indexed previousKayenWrapper, address indexed newKayenWrapper);
 event NativeCurrencyUpdated(address indexed previousCurrency, address indexed newCurrency);
+event OptimisticOracleUpdated(address indexed previousOracle, address indexed newOracle);
 
 function setPause(bool status) external onlyOwner{
     LibSettings.layout().isPaused = status;
     emit PauseStatusUpdated(status);
+}
+
+function setOptimisticOracle(address oracle) external onlyOwner{
+    LibSettings.Layout storage settings = LibSettings.layout();
+    address optimisticOracle = settings.OPTIMISTIC_ORACLE;
+    settings.OPTIMISTIC_ORACLE = optimisticOracle;
+    emit OptimisticOracleUpdated(optimisticOracle, oracle);
 }
 
 function setNativeCurrency(address nativeCurrency) external onlyOwner {

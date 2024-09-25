@@ -61,7 +61,7 @@ struct Market {
     Status status;
     MarketChoice[] choices;
     Bet[] bets;
-
+    bytes32 requestId; // reserved for optimistic oracle
 }
 
 struct Rewards{

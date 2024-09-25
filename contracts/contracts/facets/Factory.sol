@@ -53,6 +53,7 @@ function create(MarketCreationParams calldata param) external{
     newMarket.logo=param.logo;
     newMarket.creator=msg.sender;
     newMarket.status=Status.LIVE;
+    newMarket.requestId = bytes32(0);//reserved for optimistic oracle
 
     uint256 choicesLen = param.choices.length;
     for(uint256 i=0;i<choicesLen;){

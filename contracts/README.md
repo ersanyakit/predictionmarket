@@ -13,3 +13,5 @@ npx hardhat ignition deploy ./ignition/modules/Lock.ts
 npx hardhat ignition deploy ./ignition/modules/Arena.ts
 
 ```
+
+I have added the Optimistic Oracle library and interfaces, but they are not currently being used anywhere. Once integrated into the Chiliz blockchain, they will be utilized, and the DIAMOND contract will be updated accordingly.

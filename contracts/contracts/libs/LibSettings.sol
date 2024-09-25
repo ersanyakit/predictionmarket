@@ -13,6 +13,7 @@ library LibSettings {
         address KAYEN_WRAPPER;
         address FEE_RECEIVER;
         address KAYEN_ROUTER;
+        address OPTIMISTIC_ORACLE;
         
         mapping (address => bool) whiteList;
     

@@ -23,6 +23,7 @@ task("accounts", "Prints the list of accounts", async (taskArgs, hre) => {
 
 
 const config: HardhatUserConfig = {
+  //@ts-ignore
   etherscan: {
     apiKey: {
       chiliz: "chiliz", // apiKey is not required, just set a placeholder
@@ -45,8 +46,8 @@ const config: HardhatUserConfig = {
   },
   diamondAbi: {
     strict: false,
-    name: "DOMAIN",
-    include: ["Settings","Vault","Domain","Query","ReverseRegistrar","Resolver","Info"],
+    name: "ARENADIAMOND",
+    include: ["Settings","Vault","Leaderboard","Factory"],
     exclude: [],
   },
   solidity: {

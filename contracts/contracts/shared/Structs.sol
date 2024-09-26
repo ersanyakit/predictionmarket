@@ -19,7 +19,6 @@ struct MarketChoice {
 
 struct Bet{
     bool valid;
-    bool side;
     uint256 betId;
     uint256 choiceId;
     uint256 price;
@@ -43,7 +42,6 @@ struct Market {
     bool cancelled;
     bool verified;
     bool resolved; // Kazanan belirlendi mi?
-    bool side;//yes no 
     bool completed;
     uint256 id;
     uint256 resolvedId; // Kazanan seçimin indeksini saklar

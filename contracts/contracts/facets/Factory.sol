@@ -25,8 +25,8 @@ error AlreadyClaimed();
 error AlreadyRefunded();
 
 event MarketCreated(uint256 indexed marketId, address indexed creator, string title);
-event BetPlaced(uint256 indexed marketId, uint256 indexed choiceId, uint256 betId, bool side, address indexed bettor, uint256 amount, uint256 price);
-event Resolved(uint256 indexed marketId, uint256 indexed choiceId, bool winnerSide, uint256 completedAt);
+event BetPlaced(uint256 indexed marketId, uint256 indexed choiceId, uint256 betId, address indexed bettor, uint256 amount, uint256 price);
+event Resolved(uint256 indexed marketId, uint256 indexed choiceId, uint256 completedAt);
 event MarketCancelled(uint256 indexed marketId, uint256 cancelledAt);
 event Claimed(address indexed user,uint256 indexed marketId,uint256 indexed choiceId,uint256 amount,uint256 protocolFee,uint256 claimedAt);
 event Refunded(address indexed user, uint256 indexed marketId, uint256 indexed choiceId, uint256 amount, uint256 refundedAt);
@@ -74,7 +74,7 @@ function create(MarketCreationParams calldata param) external{
     emit MarketCreated(id, msg.sender, param.title);
 }
 
-function bet(uint256 marketId, uint256 choiceId, uint256 price, bool side, uint256 amount) external  whenNotPaused nonReentrant payable{
+function bet(uint256 marketId, uint256 choiceId, uint256 price,  uint256 amount) external  whenNotPaused nonReentrant payable{
     LibSettings.Layout storage settingsLib = LibSettings.layout();
     LibMarket.Layout storage marketLib = LibMarket.layout();
 
@@ -115,7 +115,6 @@ function bet(uint256 marketId, uint256 choiceId, uint256 price, bool side, uint2
     uint256 betId = market.bets.length;
     market.bets.push(Bet({
         valid:true,
-        side:side,
         betId:betId,
         choiceId:choiceId,
         price:price,
@@ -125,16 +124,16 @@ function bet(uint256 marketId, uint256 choiceId, uint256 price, bool side, uint2
     }));
 
 
-    BetInfo storage betInfo =  marketLib.betInfo[msg.sender][marketId][choiceId][side];
+    BetInfo storage betInfo =  marketLib.betInfo[msg.sender][marketId][choiceId];
     betInfo.valid = true;
     betInfo.depositAmount += amount;
     betInfo.bettor = msg.sender;
  
-    emit BetPlaced(marketId, choiceId,  betId,  side, msg.sender, amount, price);
+    emit BetPlaced(marketId, choiceId,  betId, msg.sender, amount, price);
 
 }
 
-function resolve(uint256 marketId,uint256 choiceId, bool side) external onlyOwner{
+function resolve(uint256 marketId,uint256 choiceId) external onlyOwner{
     LibMarket.Layout storage marketLib = LibMarket.layout();
     Market storage market = marketLib.markets[marketId];
     market.cancelled = false;
@@ -142,10 +141,9 @@ function resolve(uint256 marketId,uint256 choiceId, bool side) external onlyOwne
     market.completed = true;
     market.completedAt = block.timestamp;
     market.resolved = true;
-    market.side = side;
     market.resolvedId = choiceId;
     market.status = Status.COMPLETED;
-    emit Resolved(marketId, choiceId, side, block.timestamp);
+    emit Resolved(marketId, choiceId, block.timestamp);
 }
 
 function cancel(uint256 marketId) external onlyOwner{
@@ -170,7 +168,7 @@ function claim(uint256 marketId) external whenNotPaused nonReentrant{
 
 
     //userbetInfo
-    BetInfo storage betInfo = marketLib.betInfo[msg.sender][marketId][market.resolvedId][market.side];
+    BetInfo storage betInfo = marketLib.betInfo[msg.sender][marketId][market.resolvedId];
     require(!betInfo.claimed,AlreadyClaimed());
     require(betInfo.depositAmount > 0,InvalidAmount());
 
@@ -226,14 +224,14 @@ function claim(uint256 marketId) external whenNotPaused nonReentrant{
 
 }
 
-function refund(uint256 marketId, uint256 choiceId, bool side) external whenNotPaused nonReentrant {
+function refund(uint256 marketId, uint256 choiceId) external whenNotPaused nonReentrant {
     LibMarket.Layout storage marketLib = LibMarket.layout();
     LibSettings.Layout storage settingsLib = LibSettings.layout();
     Market storage market = marketLib.markets[marketId];
     require(market.valid,InvalidMarket());
     require(market.cancelled,MarketIsNotCancelled());
 
-    BetInfo storage betInfo = marketLib.betInfo[msg.sender][marketId][choiceId][side];
+    BetInfo storage betInfo = marketLib.betInfo[msg.sender][marketId][choiceId];
     require(!betInfo.refunded,AlreadyRefunded());
     require(!betInfo.valid,InvalidBet());
     require(betInfo.depositAmount > 0,InvalidAmount());

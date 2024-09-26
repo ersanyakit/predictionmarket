@@ -9,12 +9,12 @@ library LibMarket {
       Market[] markets;
       BetInfo[] allBetInfo;
 
-      //marketId -> choiceId -> side:bool -> totalDeposit
-      mapping(uint256 => mapping(uint256 => mapping(bool => uint256))) deposits;
+      //marketId -> choiceId  -> totalDeposit
+      mapping(uint256 => mapping(uint256 => uint256)) deposits;
     
 
-    // user -> marketId -> choiceId -> side:bool -> BetInfo
-    mapping(address => mapping(uint256 => mapping(uint256 => mapping(bool => BetInfo)))) betInfo;
+    // user -> marketId -> choiceId  -> BetInfo
+    mapping(address => mapping(uint256 => mapping(uint256  => BetInfo))) betInfo;
 
 
     }

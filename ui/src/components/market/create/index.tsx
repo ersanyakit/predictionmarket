@@ -1,4 +1,5 @@
-import { Button, Card, Input } from "@nextui-org/react";
+import { CONTRACT_ADRESSES } from "@/contracts/addresses";
+import { Button, Card, Input, Select, SelectItem } from "@nextui-org/react";
 import { FC, useState } from "react";
 
 
@@ -13,23 +14,27 @@ export const CreateMarket: FC<any> = ({ color, className, ...rest }) => {
   const [options, setOptions] = useState<MarketChoiceParam[]>([
     { name: '', tokenAddress: '' },
   ]);
-   // Yeni bir seçenek ekleme
-   const addOption = () => {
-    setOptions([...options, { name: '', tokenAddress: '' }]);
-  };
   
-    // Bir seçeneği kaldırma
-    const removeOption = (index: number) => {
+
+    // Yeni bir seçenek ekleme
+    const addOption = () => {
+        setOptions([...options, { name: '', tokenAddress: '' }]);
+      };
+    
+      // Bir seçeneği kaldırma
+      const removeOption = (index: number) => {
         setOptions(options.filter((_, i) => i !== index));
       };
-  
-    // Seçenek değerini güncelleme
-    const updateOption = (index: number, field: keyof MarketChoiceParam, newValue: string) => {
+    
+      // Seçenek değerini güncelleme
+      const updateOption = (index: number, field: keyof MarketChoiceParam, newValue: string) => {
         const updatedOptions = options.map((option, i) =>
           i === index ? { ...option, [field]: newValue } : option
         );
         setOptions(updatedOptions);
       };
+    
+
     const handleSubmit = () => {
       // Form submit işlemi burada yapılabilir
       console.log("Title:", title);
@@ -75,12 +80,21 @@ export const CreateMarket: FC<any> = ({ color, className, ...rest }) => {
                 value={option.name}
                 onChange={(e) => updateOption(index, 'name', e.target.value)}
               />
-              <Input
-                type="text"
+             
+             <Select
                 label={`Option ${index + 1} Token Address`}
                 value={option.tokenAddress}
-                onChange={(e) => updateOption(index, 'tokenAddress', e.target.value)}
-              />
+                //@ts-ignore
+                onChange={(e) => updateOption(index, 'tokenAddress', e as string)} // Seçilen değeri güncelle
+              >
+                {CONTRACT_ADRESSES.FAN_TOKENS.map((token : any) => (
+                  <SelectItem key={token.address} value={token.address}>
+                    {token.symbol}
+                  </SelectItem>
+                ))}
+              </Select>
+
+
               <Button color="danger" onClick={() => removeOption(index)}>
                 Remove Option
               </Button>

@@ -7,6 +7,7 @@ import "../libs/LibSettings.sol";
 import "../shared/Structs.sol";
 import "../shared/Enums.sol";
 import "../shared/TransferHelper.sol";
+import "../interfaces/IERC20.sol";
 
 contract Factory is Modifiers {
 

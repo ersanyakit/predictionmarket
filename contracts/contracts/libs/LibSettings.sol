@@ -10,7 +10,7 @@ library LibSettings {
 
         address ETHER;
         address WETH9;
-        address KAYEN_WRAPPER;
+        address CHILIZ_WRAPPER;
         address FEE_RECEIVER;
         address KAYEN_ROUTER;
         address OPTIMISTIC_ORACLE;

@@ -39,8 +39,8 @@ library LibDEX{
 
     function _approveAndWrap(address token, uint256 amount) private returns (address wrappedToken) {
         LibSettings.Layout storage settings = LibSettings.layout();
-        IERC20(token).approve(settings.KAYEN_WRAPPER, amount); // no need for check return value, bc addliquidity will revert if approve was declined.
-        wrappedToken = IChilizWrapperFactory(settings.KAYEN_WRAPPER).wrap(address(this), token, amount);
+        IERC20(token).approve(settings.CHILIZ_WRAPPER, amount); // no need for check return value, bc addliquidity will revert if approve was declined.
+        wrappedToken = IChilizWrapperFactory(settings.CHILIZ_WRAPPER).wrap(address(this), token, amount);
     }
 
 }

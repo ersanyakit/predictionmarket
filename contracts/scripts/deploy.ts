@@ -11,7 +11,7 @@ async function main() {
     const WRAPPED_CHILIZ = "0x677F7e16C7Dd57be1D4C8aD1244883214953DC47"
 
     const ROUTER_KAYEN = "0xE2918AA38088878546c1A18F2F9b1BC83297fdD3"
-    const ROUTER_KEWL = "0xA0BB8f9865f732C277d0C162249A4F6c157ae9D0"
+    const CHILIZ_WRAPPER = "0x4369601A1a37ad7176e4B6456eC454c7F21C248c"
 
     const [deployer] = await ethers.getSigners();
     
@@ -59,9 +59,18 @@ async function main() {
     console.log("DONE:WCHZ")
     
 
+    console.log("BEGIN:setKAYENRouter")
+    const setKAYENRouter = await SettingsFacet.setKayenRouter(ROUTER_KAYEN);
+    await setKAYENRouter.wait();
+    console.log("DONE:setKAYENRouter")
 
 
-    console.log("DONE.")
+    console.log("BEGIN:fanTokenWrapper")
+    const setFanTokenWrapper = await SettingsFacet.setChilizWrapper(CHILIZ_WRAPPER);
+    await setFanTokenWrapper.wait();
+    console.log("DONE:setFanTokenWrapper")
+
+    console.log("DONE.",Arena.address)
 
     
 

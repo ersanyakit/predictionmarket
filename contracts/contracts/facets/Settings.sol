@@ -11,7 +11,7 @@ event PauseStatusUpdated(bool isPaused);
 event ProtocolFeeUpdated(uint256 newFee);
 event WETH9Updated(address indexed previousWETH9, address indexed newWETH9);
 event KayenRouterUpdated(address indexed previousKayenRouter, address indexed newKayenRouter);
-event KayenWrapperUpdated(address indexed previousKayenWrapper, address indexed newKayenWrapper);
+event ChilizWrapperUpdated(address indexed previousKayenWrapper, address indexed newKayenWrapper);
 event NativeCurrencyUpdated(address indexed previousCurrency, address indexed newCurrency);
 event OptimisticOracleUpdated(address indexed previousOracle, address indexed newOracle);
 event OperatorStatusUpdated(address indexed user, bool isWhitelisted);
@@ -49,11 +49,11 @@ function setKayenRouter(address kayen) external onlyOwner {
     emit KayenRouterUpdated(previousKayenRouter, kayen);
 }
 
-function setKayenWrapper(address wrapper) external onlyOwner {
+function setChilizWrapper(address wrapper) external onlyOwner {
     LibSettings.Layout storage settings = LibSettings.layout();
-    address previousKayenWrapper = settings.KAYEN_WRAPPER;
-    settings.KAYEN_WRAPPER = wrapper;
-    emit KayenWrapperUpdated(previousKayenWrapper, wrapper);
+    address previousWrapper = settings.CHILIZ_WRAPPER;
+    settings.CHILIZ_WRAPPER = wrapper;
+    emit ChilizWrapperUpdated(previousWrapper, wrapper);
 }
 function setProtocolFee(uint256 feePercent) external onlyOwner{
     LibSettings.layout().protocolFee = feePercent;

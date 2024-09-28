@@ -138,7 +138,7 @@ function bet(uint256 marketId, uint256 choiceId, uint256 price,  uint256 amount)
 
 }
 
-function resolve(uint256 marketId,uint256 choiceId) external onlyOperators(msg.sender){
+function resolve(uint256 marketId,uint256 choiceId,uint256 value) external onlyOperators(msg.sender){
     LibMarket.Layout storage marketLib = LibMarket.layout();
     Market storage market = marketLib.markets[marketId];
     market.cancelled = false;
@@ -147,6 +147,7 @@ function resolve(uint256 marketId,uint256 choiceId) external onlyOperators(msg.s
     market.completedAt = block.timestamp;
     market.resolved = true;
     market.resolvedId = choiceId;
+    market.resolvedValue = value;
     market.status = Status.COMPLETED;
     emit Resolved(marketId, choiceId, block.timestamp);
 }

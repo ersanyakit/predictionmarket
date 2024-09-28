@@ -44,7 +44,7 @@ export const MarketList: FC<any> = ({ color, className, ...rest }) => {
                         await approveTx.wait();
     
                     }
-                    console.log("allowanceAmount",allowanceAmount)
+                    console.log("allowanceAmount",allowanceAmount,tokenAddress)
 
                     let depositOverrides = {
                         value: 0,

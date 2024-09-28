@@ -83,7 +83,7 @@ function bet(uint256 marketId, uint256 choiceId, uint256 price,  uint256 amount)
     require(market.valid,InvalidMarket());
     require(market.startedAt < block.timestamp,MarketHasNotStartedYet());
     require(market.expiredAt > block.timestamp,MarketHasAlreadyExpired());
-    require(market.resolved,MarketHasAlreadyResolved());
+    require(!market.resolved,MarketHasAlreadyResolved());
     require(!market.cancelled,MarketHasCancelled());
     require(amount > 0,InvalidAmount());
     require(price > 0,InvalidPrice());

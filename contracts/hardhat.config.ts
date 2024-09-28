@@ -47,7 +47,7 @@ const config: HardhatUserConfig = {
   diamondAbi: {
     strict: false,
     name: "ARENADIAMOND",
-    include: ["Settings","Vault","Leaderboard","Factory"],
+    include: ["Arena","Settings","Vault","Leaderboard","Factory"],
     exclude: [],
   },
   solidity: {

@@ -2,6 +2,7 @@ import {
   time,
   loadFixture,
 } from "@nomicfoundation/hardhat-toolbox/network-helpers";
+import { parseEther, parseUnits } from "ethers/lib/utils";
 
 import {ethers} from "hardhat";
 import moment from "moment";
@@ -69,6 +70,12 @@ describe("ARENA", function () {
       let expiredAt = moment(startedAt * 1000).add(7, 'days').unix(); 
       let vestingPeriod = moment(startedAt * 1000).add(10, 'days').unix(); 
 
+      const FanTokenFactory = await ethers.getContractFactory("FanToken")
+      const JUVToken = await FanTokenFactory.deploy("JUV","JUV",0,deployer.address);
+      const BARToken = await FanTokenFactory.deploy("BAR","BAR",0,deployer.address);
+      const ATMToken = await FanTokenFactory.deploy("ATM","ATM",0,deployer.address);
+      const SPURSToken = await FanTokenFactory.deploy("SPURS","SPURS",0,deployer.address);
+
       let  marketCreationParams = {
          startedAt:startedAt,
          expiredAt:expiredAt,
@@ -79,19 +86,19 @@ describe("ARENA", function () {
          choices:[
            {
              name:"JUV",
-             tokenAddress:ethers.constants.AddressZero
+             tokenAddress:JUVToken.address
           },
           {
             name:"BAR",
-            tokenAddress:ethers.constants.AddressZero
+            tokenAddress:BARToken.address
           },
           {
             name:"ATM",
-            tokenAddress:ethers.constants.AddressZero
+            tokenAddress:ATMToken.address
           },
           {
             name:"SPURS",
-            tokenAddress:ethers.constants.AddressZero
+            tokenAddress:SPURSToken.address
           },
          ]
     }
@@ -99,8 +106,17 @@ describe("ARENA", function () {
     const createTx = await FactoryFacet.create(marketCreationParams);
     await createTx.wait();
 
+    const approveTx = await JUVToken.approve(FactoryFacet.address,ethers.constants.MaxUint256)
+    await approveTx.wait()
+
+    const testBetTx = await FactoryFacet.bet(0,0,parseEther("1"),parseUnits("1",0))
+    await testBetTx.wait();
+
+
     const predictionMarkets = await FactoryFacet.fetch();
     console.log(predictionMarkets[0].choices)
+
+
      
     
 

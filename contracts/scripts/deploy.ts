@@ -53,7 +53,10 @@ async function main() {
     await setFeeReceiverTx.wait();
     console.log("DONE:setFeeReceiverTx")
 
-    
+    console.log("BEGIN:WCHZ")
+    const setWCHZ = await SettingsFacet.setWETH9(WRAPPED_CHILIZ);
+    await setWCHZ.wait();
+    console.log("DONE:WCHZ")
     
 
 

@@ -132,6 +132,7 @@ function bet(uint256 marketId, uint256 choiceId, uint256 price,  uint256 amount)
     betInfo.depositAmount += amount;
     betInfo.bettor = msg.sender;
     betInfo.claimed = false;
+    betInfo.tokenAddress = choice.tokenAddress;
 
  
     emit BetPlaced(marketId, choiceId,  betId, msg.sender, amount, price);
@@ -171,7 +172,7 @@ function claim(uint256 marketId) external whenNotPaused nonReentrant{
     Market storage market = marketLib.markets[marketId];
     require(market.valid,InvalidMarket());
     require(!market.cancelled,MarketIsCancelled());
-    require(!market.resolved,MarketIsNotResolved());
+    require(market.resolved,MarketIsNotResolved());
 
     //userbetInfo
     BetInfo storage betInfo = marketLib.betInfo[msg.sender][marketId][market.resolvedId];
@@ -183,24 +184,29 @@ function claim(uint256 marketId) external whenNotPaused nonReentrant{
 
     MarketChoice memory winner = market.choices[market.resolvedId];
 
-    if(betInfo.tokenAddress == settingsLib.ETHER){
+    if(winner.tokenAddress == settingsLib.ETHER){
         TransferHelper.safeTransferETH(betInfo.bettor,betInfo.depositAmount);
-
     }else{
-        TransferHelper.safeTransfer(betInfo.tokenAddress,betInfo.bettor,betInfo.depositAmount);
+        TransferHelper.safeTransfer(winner.tokenAddress,betInfo.bettor,betInfo.depositAmount);
     }
 
-
     uint256 choicesLength = market.choices.length;
+
+
     for(uint256 choiceIndex; choiceIndex < choicesLength;){
         if(choiceIndex == market.resolvedId){
+            choiceIndex++;
             continue;   
         }
         MarketChoice memory loser = market.choices[choiceIndex];
+
         if(loser.totalDeposit == 0){
+             choiceIndex++;
             continue;
         }
+
         uint256 totalWinnings = (betInfo.depositAmount * loser.totalDeposit) / winner.totalDeposit;
+        
         if(totalWinnings > 0){
             uint256 protocolFee = calculate(totalWinnings,settingsLib.protocolFee);
 
@@ -224,7 +230,7 @@ function claim(uint256 marketId) external whenNotPaused nonReentrant{
             emit Claimed(msg.sender, marketId, choiceIndex, totalWinnings, protocolFee, block.timestamp);
 
         }
-
+        
         unchecked{
             choiceIndex++;
         }

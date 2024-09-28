@@ -6,6 +6,7 @@ import { parseEther, parseUnits } from "ethers/lib/utils";
 
 import {ethers} from "hardhat";
 import moment from "moment";
+import { Factory } from "../typechain";
 const {DiamondFacetList} = require("../libs/facets.js")
 const {getSelectors, FacetCutAction} = require("../libs/diamond.js")
 
@@ -17,7 +18,7 @@ describe("ARENA", function () {
    
 
     // Contracts are deployed using the first signer/account by default
-    const [deployer, otherAccount] = await ethers.getSigners();
+    const [deployer, user1,user2,user3,user4,user5,user6] = await ethers.getSigners();
 
     console.log("Deployer",deployer.address)
     const ArenaFactory = await ethers.getContractFactory("Arena");
@@ -57,14 +58,20 @@ describe("ARENA", function () {
     await setFeeReceiverTx.wait();
     console.log("DONE:setFeeReceiverTx")
 
+
+    console.log("BEGIN:setOperators")
+    const setOperatorTx = await SettingsFacet.setOperators([deployer.address,user1.address,user2.address,user3.address],true);
+    await setOperatorTx.wait();
+    console.log("DONE:setOperators")
+
     
 
-    return { deployer, Arena,SettingsFacet,FactoryFacet,LeaderboardFacet};
+    return { deployer,user1,user2,user3,user4,user5, Arena,SettingsFacet,FactoryFacet,LeaderboardFacet};
   }
 
   describe("Deployment", function () {
     it("Tests", async function () {
-      const { deployer, Arena,SettingsFacet,FactoryFacet,LeaderboardFacet } = await loadFixture(deployArenaDiamond);
+      const { deployer,user1,user2,user3,user4,user5, Arena,SettingsFacet,FactoryFacet,LeaderboardFacet } = await loadFixture(deployArenaDiamond);
 
       let startedAt = moment().unix()
       let expiredAt = moment(startedAt * 1000).add(7, 'days').unix(); 
@@ -115,6 +122,13 @@ describe("ARENA", function () {
 
     const predictionMarkets = await FactoryFacet.fetch();
     console.log(predictionMarkets[0].choices)
+
+    const resolveTx = await FactoryFacet.resolve(0,0, parseEther("1"))
+    await resolveTx.wait();
+
+    const claimTx = await FactoryFacet.claim(0);
+    await claimTx.wait()
+
 
 
      

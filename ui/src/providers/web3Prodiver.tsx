@@ -2,7 +2,7 @@
 import { ReactNode } from "react";
 
 import { createWeb3Modal, defaultConfig } from "@web3modal/ethers/react";
-import { ALL_CHAINS, CHILIZ } from "@/utils/chains";
+import { ALL_CHAINS, CHILIZ, CHILIZ_SPICY } from "@/utils/chains";
 import { metadata } from "@/utils/constants";
 
 const projectId =
@@ -16,9 +16,10 @@ createWeb3Modal({
     metadata,
   }),
   chains: ALL_CHAINS,
-  defaultChain: CHILIZ,
+  defaultChain: CHILIZ_SPICY,
   chainImages: {
     88888: CHILIZ.image,
+    8882:CHILIZ_SPICY.image
   },
 
   projectId,

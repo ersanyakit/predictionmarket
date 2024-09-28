@@ -8,6 +8,13 @@ import ARENA_DIAMOND_ABI from "../contracts/abi/ARENADIAMOND.json";
 import { CONTRACT_ADRESSES } from "@/contracts/addresses";
 
 
+export const metadata = {
+  name: "PREDICTION MARKET APP",
+  description: "Desx.",
+  url: "https://kewl.exchange",
+  icons: ["/logo/logo-symbol.png"],
+};
+
 export const clients = {
   chilizClient: createPublicClient({
     batch: {

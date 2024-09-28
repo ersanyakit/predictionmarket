@@ -1,5 +1,4 @@
 import { CONTRACT_ADRESSES } from "@/contracts/addresses";
-import { MAGGO_NFT_CONTRACT } from "@/utils/constants";
 import Moralis from "moralis";
 import { useEffect, useState } from "react";
 import { isAddress } from "viem";
@@ -28,27 +27,8 @@ const useMoralisGetNFTs = (userAddress: any) => {
   }, []);
 
   useEffect(() => {
-    const userNFTsGetter = async () => {
-      try {
-        if (!isAddress(userAddress) || !userAddress) {
-          return;
-        }
-        setIsLoading(true);
-        const response = await Moralis.EvmApi.nft.getWalletNFTs({
-          chain: MAGGO_NFT_CONTRACT.chainId,
-          format: "decimal",
-          tokenAddresses: [CONTRACT_ADRESSES.MAGGOONFT],
-          mediaItems: false,
-          address: userAddress,
-        });
 
-        setNFTs(response.raw);
-        setIsLoading(false);
-      } catch (error) {
-        setIsLoading(false);
-      }
-    };
-    userNFTsGetter();
+    
   }, [userAddress]);
 
   return { isLoading, nfts };

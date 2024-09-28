@@ -51,7 +51,7 @@ export const Resolve: FC<any> = ({ color, className, ...rest }) => {
                     const tx = await diamondContract
                         .connect(signer)
                         // @ts-ignore
-                        .resolve(marketId, choiceId);
+                        .resolve(marketId, choiceId,0);
 
                     await tx.wait();
                     setLoaded(false)

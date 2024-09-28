@@ -187,7 +187,7 @@ export const MarketList: FC<any> = ({ color, className, ...rest }) => {
             console.log("ERROR", error)
             return;
         } else {
-            setMarkets(data)
+            setMarkets(data.slice().reverse())
             console.log("DATA", data)
         }
 

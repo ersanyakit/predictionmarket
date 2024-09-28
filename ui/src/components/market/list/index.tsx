@@ -17,7 +17,7 @@ export const MarketList: FC<any> = ({ color, className, ...rest }) => {
 
     const MarketItem = (props: { market: any }) => {
 
-        const ChoiceItem = (props: { marketId: any, choice: any, choiceId: any }) => {
+        const ChoiceItem = (props: { marketId: any, choice: any, choiceId: any, resolved:boolean, resolvedId:any }) => {
             const [price, setPrice] = useState("0")
             const [amount, setAmount] = useState("0")
             const [isLoading, setLoaded] = useState(false)
@@ -73,6 +73,30 @@ export const MarketList: FC<any> = ({ color, className, ...rest }) => {
                 }
             }
 
+            const handleClaim = async(marketId : any) => {
+                try {
+                    setLoaded(true)
+
+
+                    const signer = await GetSigner(walletProvider);
+                    const diamondContract = GetContractAt(ARENA_DIAMOND_CONTRACT);
+      
+            
+
+                    const tx = await diamondContract
+                        .connect(signer)
+                        // @ts-ignore
+                        .claim(marketId);
+
+                    await tx.wait();
+                    setLoaded(false)
+
+                } catch (error) {
+                    console.log(error)
+                    setLoaded(false)
+                }
+            }
+
             return (
                 <Card className="w-full flex flex-col gap-2">
                     <CardHeader>
@@ -88,14 +112,30 @@ export const MarketList: FC<any> = ({ color, className, ...rest }) => {
                         <span>maxPrice : {formatData(props.choice.maxPrice,18)} CHZ</span>
 
                     </CardBody>
-                    <CardFooter className="flex flex-col gap-2 p-2">
-                        <Input type="text" label="Price" value={price}
-                            onValueChange={setPrice} />
-                        <Input type="text" label="Amount" value={amount}
-                            onValueChange={setAmount} />
-                        <Button isLoading={isLoading} fullWidth size="lg" color="danger" onClick={() => {
-                            handleVote(props.marketId, props.choiceId, props.choice.tokenAddress)
-                        }}>Vote</Button>
+                    <CardFooter className="w-full flex flex-col gap-2 p-2">
+    
+                                {
+                                    !props.resolved  && <div  className="w-full flex flex-col gap-2 p-2">
+                                     <Input type="text" label="Price" value={price}
+                                        onValueChange={setPrice} />
+                                    <Input type="text" label="Amount" value={amount}
+                                        onValueChange={setAmount} />
+                                    <Button isLoading={isLoading} fullWidth size="lg" color="danger" onClick={() => {
+                                        handleVote(props.marketId, props.choiceId, props.choice.tokenAddress)
+                                    }}>Vote</Button>
+                                    </div>
+                                }
+
+                                {
+                                    props.resolvedId ==props.choiceId && <div className="w-full">
+                                        <Button onClick={()=>{
+                                            handleClaim(props.marketId)
+                                        }} fullWidth color="success">Claim</Button>
+                                    </div>
+                                }
+                        
+                       
+                       
                     </CardFooter>
                 </Card>
             )
@@ -143,7 +183,7 @@ export const MarketList: FC<any> = ({ color, className, ...rest }) => {
                                     <CardBody className="grid grid-cols-4 gap-2 p-2">
                                         {
                                             props.market.choices.map((choice: any, index: number) => (
-                                                <ChoiceItem key={index} choice={choice} choiceId={index} marketId={props.market.id} />
+                                                <ChoiceItem resolved={props.market.resolved} resolvedId={props.market.resolvedId} key={index} choice={choice} choiceId={index} marketId={props.market.id} />
                                             ))
                                         }
 

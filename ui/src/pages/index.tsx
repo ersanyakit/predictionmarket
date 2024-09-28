@@ -23,8 +23,8 @@ export default function Home() {
           </Card>  
         </Tab>
         <Tab key="resolve" title="Resolve">
-        <Card>
-        <CardBody>
+          <Card>
+            <CardBody>
               <Resolve/>
             </CardBody>
           </Card>  

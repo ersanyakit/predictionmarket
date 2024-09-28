@@ -152,6 +152,7 @@ export const MarketCreationForm = () => {
                     <Select
                         label={`Option ${index + 1} Token Address`}
                         value={choice.tokenAddress}
+                        selectionMode='single'
                         onChange={(e: any) => updateChoice(index, 'tokenAddress', e.target.value)} // Seçilen değeri doğrudan kullanıyoruz
                     >
                         {CONTRACT_ADRESSES.FAN_TOKENS.map((token: any) => (

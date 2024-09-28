@@ -19,6 +19,8 @@ error MarketHasAlreadyResolved();
 error MarketHasCancelled();
 error MarketIsNotCancelled();
 error MarketIsCancelled();
+error MarketIsNotResolved();
+
 error InvalidBet();
 error InvalidPrice();
 error AlreadyClaimed();
@@ -81,10 +83,10 @@ function bet(uint256 marketId, uint256 choiceId, uint256 price,  uint256 amount)
     require(marketId < marketLib.markets.length, InvalidMarket());
     Market storage market = marketLib.markets[marketId];
     require(market.valid,InvalidMarket());
-//    require(market.startedAt < block.timestamp,MarketHasNotStartedYet());
- //   require(market.expiredAt > block.timestamp,MarketHasAlreadyExpired());
- //   require(!market.resolved,MarketHasAlreadyResolved());
- //   require(!market.cancelled,MarketHasCancelled());
+    //require(block.timestamp > market.startedAt,MarketHasNotStartedYet());
+    //require(block.timestamp < market.expiredAt,MarketHasAlreadyExpired());
+    require(!market.resolved,MarketHasAlreadyResolved());
+    require(!market.cancelled,MarketHasCancelled());
     require(amount > 0,InvalidAmount());
     require(price > 0,InvalidPrice());
 
@@ -129,12 +131,14 @@ function bet(uint256 marketId, uint256 choiceId, uint256 price,  uint256 amount)
     betInfo.valid = true;
     betInfo.depositAmount += amount;
     betInfo.bettor = msg.sender;
+    betInfo.claimed = false;
+
  
     emit BetPlaced(marketId, choiceId,  betId, msg.sender, amount, price);
 
 }
 
-function resolve(uint256 marketId,uint256 choiceId) external onlyOwner{
+function resolve(uint256 marketId,uint256 choiceId) external {
     LibMarket.Layout storage marketLib = LibMarket.layout();
     Market storage market = marketLib.markets[marketId];
     market.cancelled = false;
@@ -166,7 +170,7 @@ function claim(uint256 marketId) external whenNotPaused nonReentrant{
     Market storage market = marketLib.markets[marketId];
     require(market.valid,InvalidMarket());
     require(!market.cancelled,MarketIsCancelled());
-
+    require(!market.resolved,MarketIsNotResolved());
 
     //userbetInfo
     BetInfo storage betInfo = marketLib.betInfo[msg.sender][marketId][market.resolvedId];
@@ -192,6 +196,9 @@ function claim(uint256 marketId) external whenNotPaused nonReentrant{
             continue;   
         }
         MarketChoice memory loser = market.choices[choiceIndex];
+        if(loser.totalDeposit == 0){
+            continue;
+        }
         uint256 totalWinnings = (betInfo.depositAmount * loser.totalDeposit) / winner.totalDeposit;
         if(totalWinnings > 0){
             uint256 protocolFee = calculate(totalWinnings,settingsLib.protocolFee);

@@ -33,7 +33,7 @@ export const clients = {
     cacheTime: 10_000,
     pollingInterval: 10_000,
     chain: spicy,
-    transport: http(CHILIZ_SPICY.rpcUrl[0]),
+    transport: http("https://spicy-rpc.chiliz.com"),
   }),
 
 };

@@ -1,6 +1,6 @@
 import { formatData, unixToDateTime } from "@/utils/helpers";
 import { FETCH_MARKET_DATA } from "@/utils/web3";
-import { Button, Card, CardBody, CardFooter, CardHeader, User } from "@nextui-org/react";
+import { Button, Card, CardBody, CardFooter, CardHeader, Input, Tab, Tabs, User } from "@nextui-org/react";
 import { formatEther } from "ethers/utils";
 import { FC, useEffect, useState } from "react";
 
@@ -9,9 +9,16 @@ export const MarketList: FC<any> = ({ color, className, ...rest }) => {
     const [markets, setMarkets] = useState<any[]>([]);
 
     const MarketItem = (props: { market: any }) => {
+        const [isLoading, setLoaded] = useState(false)
 
-        const ChoiceItem = (props:{choice:any}) => {
-            return(
+        const ChoiceItem = (props: { marketId: any, choice: any, choiceId: any }) => {
+
+
+            const handleVote = async (marketId: any, choiceId: any) => {
+
+            }
+
+            return (
                 <Card className="w-full flex flex-col gap-2">
                     <CardHeader>
                         {props.choice.name}
@@ -24,9 +31,14 @@ export const MarketList: FC<any> = ({ color, className, ...rest }) => {
                         <span>maxBet : {formatData(props.choice.maxBet)}</span>
                         <span>minPrice : {formatData(props.choice.minPrice)} CHZ</span>
                         <span>maxPrice : {formatData(props.choice.maxPrice)} CHZ</span>
+
                     </CardBody>
-                    <CardFooter>
-                        <Button fullWidth size="lg" color="danger">Vote</Button>
+                    <CardFooter className="flex flex-col gap-2 p-2">
+                        <Input type="text" label="Price" />
+                        <Input type="text" label="Amount" />
+                        <Button isLoading={isLoading} fullWidth size="lg" color="danger" onClick={() => {
+                            handleVote(props.marketId, props.choiceId)
+                        }}>Vote</Button>
                     </CardFooter>
                 </Card>
             )
@@ -34,35 +46,53 @@ export const MarketList: FC<any> = ({ color, className, ...rest }) => {
 
         return (
             <>
+
+
                 <Card>
                     <CardHeader>
                         <div className="w-full flex flex-row gap-2 justify-start items-center">
-                        <User
-                            name={props.market.title}
-                            description={props.market.description}
-                            avatarProps={{
-                                src: props.market.logo
-                            }}
+                            <User
+                                name={props.market.title}
+                                description={props.market.description}
+                                avatarProps={{
+                                    src: props.market.logo
+                                }}
                             />
-                     
+
                         </div>
 
                     </CardHeader>
-                    <CardBody className="grid grid-cols-4 gap-2 p-2">
+                    <CardBody >
+                        <Tabs aria-label="Options">
+                            <Tab key="choice" title="Choice">
+                                <Card>
+                                    <CardBody className="grid grid-cols-4 gap-2 p-2">
+                                        {
+                                            props.market.choices.map((choice: any, index: number) => (
+                                                <ChoiceItem key={index} choice={choice} choiceId={index} marketId={props.market.id} />
+                                            ))
+                                        }
 
-                        {
-                              props.market.choices.map((choice : any, index : number) => (
-                                <ChoiceItem key={index} choice={choice} />
-                            ))
-                        }
+                                    </CardBody>
+                                </Card>
+                            </Tab>
+                            <Tab key="bettors" title="Bettors">
+                                <Card>
+                                    <CardBody>
+                                        Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+                                    </CardBody>
+                                </Card>
+                            </Tab>
+                        </Tabs>
+
 
 
                     </CardBody>
                     <CardFooter>
                         <div className="w-full flex flex-col gap-2 p-2">
-                        <span className="text-sm">Created Date : {unixToDateTime(props.market.createdAt)}</span>
-                         <span className="text-sm">Started Date : {unixToDateTime(props.market.createdAt)}</span>
-                        <span className="text-sm">Expire Date : {unixToDateTime(props.market.expiredAt)}</span>
+                            <span className="text-sm">Created Date : {unixToDateTime(props.market.createdAt)}</span>
+                            <span className="text-sm">Started Date : {unixToDateTime(props.market.createdAt)}</span>
+                            <span className="text-sm">Expire Date : {unixToDateTime(props.market.expiredAt)}</span>
                         </div>
 
                     </CardFooter>

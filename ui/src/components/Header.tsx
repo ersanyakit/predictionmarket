@@ -28,7 +28,8 @@ export default function Header2() {
     <Navbar
       maxWidth="full"
       isMenuOpen={isMenuOpen}
-      className={`h-24 fixed z-[10]`}
+  
+      className={`h-24 fixed z-[1099] bg-red-500 text-white`}
       onMenuOpenChange={setIsMenuOpen}
     >
       <NavbarContent>
@@ -43,24 +44,7 @@ export default function Header2() {
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent
-        className="flex sm:hidden gap-4 text-white"
-        justify="center"
-      >
-        
-        <NavbarItem>
-          <Button
-            onClick={() => router.push("/profile")}
-            className={
-              router.asPath === "/profile"
-                ? "text-2xl bg-transparent text-primary-300"
-                : "text-2xl bg-transparent text-white"
-            }
-          >
-            Profile
-          </Button>
-        </NavbarItem>
-      </NavbarContent>
+ 
 
       <NavbarContent justify="end">
         <NavbarItem>
@@ -72,12 +56,7 @@ export default function Header2() {
         <NavbarMenuItem className="pt-10 flex flex-col gap-10">
           
           
-          <Button
-            className="w-full text-white bg-transparent justify-start text-3xl"
-            onClick={() => handleMenuClick("/profile")}
-          >
-            Profile
-          </Button>
+        
         </NavbarMenuItem>
       </NavbarMenu>
     </Navbar>

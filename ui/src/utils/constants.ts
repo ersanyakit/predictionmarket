@@ -4,6 +4,7 @@ import { chiliz, spicy } from "viem/chains";
 import { IContract } from "@/types";
 
 import ARENA_DIAMOND_ABI from "../contracts/abi/ARENADIAMOND.json";
+import ERC20_ABI from "../contracts/abi/ERC20.json";
 
 import { CONTRACT_ADRESSES } from "@/contracts/addresses";
 
@@ -48,3 +49,12 @@ export const ARENA_DIAMOND_CONTRACT: IContract = {
 };
 
  
+export const ERC20_CONTRACT = (address: string): IContract => {
+  return {
+    address: address,
+    abi: ERC20_ABI.abi,
+    chainId: CHILIZ_SPICY.chainId,
+    rpcUrl: "https://spicy-rpc.chiliz.com",
+  };
+};
+

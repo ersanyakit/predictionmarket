@@ -28,12 +28,12 @@ export const clients = {
 
   spicyClient: createPublicClient({
     batch: {
-      multicall: true,
+      multicall: false,
     },
     cacheTime: 10_000,
     pollingInterval: 10_000,
     chain: spicy,
-    transport: http(CHILIZ_SPICY.rpcUrl[1]),
+    transport: http(CHILIZ_SPICY.rpcUrl[0]),
   }),
 
 };
@@ -44,7 +44,7 @@ export const ARENA_DIAMOND_CONTRACT: IContract = {
   address: CONTRACT_ADRESSES.ARENADIAMOND,
   abi: ARENA_DIAMOND_ABI.abi,
   chainId: CHILIZ_SPICY.chainId,
-  rpcUrl: CHILIZ_SPICY.rpcUrl[1]
+  rpcUrl: CHILIZ_SPICY.rpcUrl[0]
 };
 
  

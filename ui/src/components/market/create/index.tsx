@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { Input, Button, Select, SelectItem } from '@nextui-org/react';
 import { CONTRACT_ADRESSES } from '@/contracts/addresses';
+import { GetContractAt, GetSigner } from '@/utils/web3';
+import { ARENA_DIAMOND_CONTRACT } from '@/utils/constants';
+import { useWeb3ModalProvider } from '@web3modal/ethers/react';
 
 // TypeScript yapıları
 interface MarketChoiceParam {
@@ -19,6 +22,9 @@ interface MarketCreationParams {
 }
 
 export const MarketCreationForm = () => {
+    const [isLoading,setLoaded] = useState(false)
+    const { walletProvider } = useWeb3ModalProvider();
+
     // Form alanları için state
     const [marketParams, setMarketParams] = useState<MarketCreationParams>({
         startedAt: Date.now(),
@@ -66,9 +72,33 @@ export const MarketCreationForm = () => {
     };
 
     // Formu submit etme fonksiyonu
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         console.log("Form verileri:", marketParams);
-        // API ya da akıllı sözleşme ile submit edilebilir
+
+        
+            try {
+              setLoaded(true)
+        
+              const signer = await GetSigner(walletProvider);
+              const contract = GetContractAt(ARENA_DIAMOND_CONTRACT);
+        
+              let depositOverrides = {
+                value: 0,
+              };
+        
+              const tx = await contract
+                .connect(signer)
+                // @ts-ignore
+                .create(marketParams);
+        
+              await tx.wait();
+              setLoaded(false)
+            
+            } catch (error) {
+                console.log(error)
+            setLoaded(false)
+            }
+          
     };
 
     return (
@@ -142,7 +172,7 @@ export const MarketCreationForm = () => {
             </Button>
 
             {/* Submit butonu */}
-            <Button color="danger" onClick={handleSubmit}>
+            <Button isLoading={isLoading} color="danger" onClick={handleSubmit}>
                 Create Market
             </Button>
         </div>

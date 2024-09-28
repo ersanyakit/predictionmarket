@@ -33,6 +33,10 @@ export const FETCH_MARKET_DATA = async (): Promise<FetchMarketDataResponse> => {
       client: selectedClient,
     });
 
+    console.log("selectedClient",selectedClient)
+
+    console.log(contract)
+
     const marketItems = await contract.read.fetch();
     return { data: marketItems, error: null };
   } catch (error) {
@@ -40,3 +44,4 @@ export const FETCH_MARKET_DATA = async (): Promise<FetchMarketDataResponse> => {
     return { data: null, error };
   }
 };
+

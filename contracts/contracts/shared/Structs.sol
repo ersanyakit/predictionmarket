@@ -41,16 +41,19 @@ struct Market {
     bool valid;
     bool cancelled;
     bool verified;
-    bool resolved; // Kazanan belirlendi mi?
+    bool resolved; // is resolved?
     bool completed;
+
     uint256 id;
-    uint256 resolvedId; // Kazanan seçimin indeksini saklar
+    uint256 resolvedId; // reserved for resolveId
+    uint256 resolvedValue; // reserved for resolve value 
     uint256 feePercent;
     uint256 startedAt;
     uint256 createdAt;
     uint256 expiredAt;
     uint256 cancelledAt;
     uint256 completedAt;
+    uint256 verifiedAt;
 
     string title;
     string description;

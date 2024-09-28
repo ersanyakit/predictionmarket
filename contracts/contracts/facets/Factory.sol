@@ -300,11 +300,12 @@ function allMarketsLength() external view returns(uint256){
     return LibMarket.layout().markets.length;
 }
 
-function verify(uint256 marketId, bool status) external onlyOwner {
+function verify(uint256 marketId, bool status) external onlyOperators(msg.sender) {
     LibMarket.Layout storage marketLib = LibMarket.layout();
     Market storage market = marketLib.markets[marketId];
     require(market.id > 0, InvalidMarket());
     market.verified = status;
+    market.verifiedAt = block.timestamp;
     emit MarketVerified(marketId, status); // Emit the event after updating the status
 }
 }

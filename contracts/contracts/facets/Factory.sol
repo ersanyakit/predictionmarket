@@ -90,6 +90,7 @@ function bet(uint256 marketId, uint256 choiceId, uint256 price,  uint256 amount)
 
 
     MarketChoice storage choice = market.choices[choiceId];
+    choice.userCount += 1;
     if(choice.tokenAddress == settingsLib.ETHER){
         require(msg.value == amount,InvalidAmount());
     }else{

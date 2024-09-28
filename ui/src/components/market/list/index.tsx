@@ -1,5 +1,5 @@
 import { IContract } from "@/types";
-import { ARENA_DIAMOND_CONTRACT, ERC20_CONTRACT, ERC2_CONTRACT } from "@/utils/constants";
+import { ARENA_DIAMOND_CONTRACT, ERC20_CONTRACT } from "@/utils/constants";
 import { formatData, unixToDateTime } from "@/utils/helpers";
 import { FETCH_MARKET_DATA, GetContractAt, GetSigner, selectedClient } from "@/utils/web3";
 import { Button, Card, CardBody, CardFooter, CardHeader, Input, Tab, Tabs, User } from "@nextui-org/react";

@@ -40,7 +40,7 @@ export const clients = {
 
 
 
-export const MAGGO_DIAMOND_CONTRACT: IContract = {
+export const ARENA_DIAMOND_CONTRACT: IContract = {
   address: CONTRACT_ADRESSES.ARENADIAMOND,
   abi: ARENA_DIAMOND_ABI.abi,
   chainId: CHILIZ_SPICY.chainId,

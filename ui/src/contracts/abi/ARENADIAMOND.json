@@ -5,12 +5,376 @@
   "abi": [
     {
       "inputs": [],
+      "name": "DiamondWritable__InvalidInitializationParameters",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "DiamondWritable__RemoveTargetNotZeroAddress",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "DiamondWritable__ReplaceTargetIsIdentical",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "DiamondWritable__SelectorAlreadyAdded",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "DiamondWritable__SelectorIsImmutable",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "DiamondWritable__SelectorNotFound",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "DiamondWritable__SelectorNotSpecified",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "DiamondWritable__TargetHasNoCode",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "ERC165Base__InvalidInterfaceId",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Ownable__NotOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Ownable__NotTransitiveOwner",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "Proxy__ImplementationIsNotContract",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "SafeOwnable__NotNomineeOwner",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "target",
+              "type": "address"
+            },
+            {
+              "internalType": "enum IDiamondWritableInternal.FacetCutAction",
+              "name": "action",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bytes4[]",
+              "name": "selectors",
+              "type": "bytes4[]"
+            }
+          ],
+          "indexed": false,
+          "internalType": "struct IDiamondWritableInternal.FacetCut[]",
+          "name": "facetCuts",
+          "type": "tuple[]"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "target",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        }
+      ],
+      "name": "DiamondCut",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "previousOwner",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newOwner",
+          "type": "address"
+        }
+      ],
+      "name": "OwnershipTransferred",
+      "type": "event"
+    },
+    {
+      "inputs": [],
+      "name": "acceptOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "target",
+              "type": "address"
+            },
+            {
+              "internalType": "enum IDiamondWritableInternal.FacetCutAction",
+              "name": "action",
+              "type": "uint8"
+            },
+            {
+              "internalType": "bytes4[]",
+              "name": "selectors",
+              "type": "bytes4[]"
+            }
+          ],
+          "internalType": "struct IDiamondWritableInternal.FacetCut[]",
+          "name": "facetCuts",
+          "type": "tuple[]"
+        },
+        {
+          "internalType": "address",
+          "name": "target",
+          "type": "address"
+        },
+        {
+          "internalType": "bytes",
+          "name": "data",
+          "type": "bytes"
+        }
+      ],
+      "name": "diamondCut",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes4",
+          "name": "selector",
+          "type": "bytes4"
+        }
+      ],
+      "name": "facetAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "facet",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "facetAddresses",
+      "outputs": [
+        {
+          "internalType": "address[]",
+          "name": "addresses",
+          "type": "address[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "facet",
+          "type": "address"
+        }
+      ],
+      "name": "facetFunctionSelectors",
+      "outputs": [
+        {
+          "internalType": "bytes4[]",
+          "name": "selectors",
+          "type": "bytes4[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "facets",
+      "outputs": [
+        {
+          "components": [
+            {
+              "internalType": "address",
+              "name": "target",
+              "type": "address"
+            },
+            {
+              "internalType": "bytes4[]",
+              "name": "selectors",
+              "type": "bytes4[]"
+            }
+          ],
+          "internalType": "struct IDiamondReadable.Facet[]",
+          "name": "diamondFacets",
+          "type": "tuple[]"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "getFallbackAddress",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "fallbackAddress",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "name",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "nomineeOwner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "owner",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "fallbackAddress",
+          "type": "address"
+        }
+      ],
+      "name": "setFallbackAddress",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "bytes4",
+          "name": "interfaceId",
+          "type": "bytes4"
+        }
+      ],
+      "name": "supportsInterface",
+      "outputs": [
+        {
+          "internalType": "bool",
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "symbol",
+      "outputs": [
+        {
+          "internalType": "string",
+          "name": "",
+          "type": "string"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        }
+      ],
+      "name": "transferOwnership",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
       "name": "AlreadyClaimed",
       "type": "error"
     },
     {
       "inputs": [],
       "name": "AlreadyRefunded",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "InvalidAction",
       "type": "error"
     },
     {
@@ -66,6 +430,11 @@
     {
       "inputs": [],
       "name": "MarketIsNotCancelled",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "MarketIsNotResolved",
       "type": "error"
     },
     {
@@ -490,6 +859,11 @@
             },
             {
               "internalType": "uint256",
+              "name": "resolvedValue",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
               "name": "feePercent",
               "type": "uint256"
             },
@@ -516,6 +890,11 @@
             {
               "internalType": "uint256",
               "name": "completedAt",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "verifiedAt",
               "type": "uint256"
             },
             {
@@ -695,6 +1074,11 @@
             },
             {
               "internalType": "uint256",
+              "name": "resolvedValue",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
               "name": "feePercent",
               "type": "uint256"
             },
@@ -721,6 +1105,11 @@
             {
               "internalType": "uint256",
               "name": "completedAt",
+              "type": "uint256"
+            },
+            {
+              "internalType": "uint256",
+              "name": "verifiedAt",
               "type": "uint256"
             },
             {
@@ -880,6 +1269,11 @@
           "internalType": "uint256",
           "name": "choiceId",
           "type": "uint256"
+        },
+        {
+          "internalType": "uint256",
+          "name": "value",
+          "type": "uint256"
         }
       ],
       "name": "resolve",
@@ -967,6 +1361,25 @@
         {
           "indexed": true,
           "internalType": "address",
+          "name": "previousKayenWrapper",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "newKayenWrapper",
+          "type": "address"
+        }
+      ],
+      "name": "ChilizWrapperUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
           "name": "previousReceiver",
           "type": "address"
         },
@@ -1005,25 +1418,6 @@
         {
           "indexed": true,
           "internalType": "address",
-          "name": "previousKayenWrapper",
-          "type": "address"
-        },
-        {
-          "indexed": true,
-          "internalType": "address",
-          "name": "newKayenWrapper",
-          "type": "address"
-        }
-      ],
-      "name": "KayenWrapperUpdated",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": true,
-          "internalType": "address",
           "name": "previousCurrency",
           "type": "address"
         },
@@ -1035,6 +1429,25 @@
         }
       ],
       "name": "NativeCurrencyUpdated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "user",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "bool",
+          "name": "isWhitelisted",
+          "type": "bool"
+        }
+      ],
+      "name": "OperatorStatusUpdated",
       "type": "event"
     },
     {
@@ -1143,6 +1556,19 @@
       "inputs": [
         {
           "internalType": "address",
+          "name": "wrapper",
+          "type": "address"
+        }
+      ],
+      "name": "setChilizWrapper",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
           "name": "feeReceiver",
           "type": "address"
         }
@@ -1169,11 +1595,11 @@
       "inputs": [
         {
           "internalType": "address",
-          "name": "wrapper",
+          "name": "nativeCurrency",
           "type": "address"
         }
       ],
-      "name": "setKayenWrapper",
+      "name": "setNativeCurrency",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -1181,12 +1607,17 @@
     {
       "inputs": [
         {
-          "internalType": "address",
-          "name": "nativeCurrency",
-          "type": "address"
+          "internalType": "address[]",
+          "name": "operators",
+          "type": "address[]"
+        },
+        {
+          "internalType": "bool",
+          "name": "enabled",
+          "type": "bool"
         }
       ],
-      "name": "setNativeCurrency",
+      "name": "setOperators",
       "outputs": [],
       "stateMutability": "nonpayable",
       "type": "function"
@@ -1344,6 +1775,533 @@
       "name": "withdrawETH",
       "outputs": [],
       "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "AlreadyExists",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "WrappedTokenDoesNotExist",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "WrappedTokenExists",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "underlyingToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "wrappedToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "newUnderlyingToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "newWrappedToken",
+          "type": "address"
+        }
+      ],
+      "name": "MappingChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "wrappedToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "unwrappedAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Unwrap",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "underlyingToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "wrappedToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "wrappedAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Wrap",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "underlyingToken",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "wrappedToken",
+          "type": "address"
+        }
+      ],
+      "name": "WrappedTokenCreated",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "underlyingToken",
+          "type": "address"
+        }
+      ],
+      "name": "createWrappedToken",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "underlyingToken",
+          "type": "address"
+        }
+      ],
+      "name": "getUnderlyingToWrapped",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "wrappedToken",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "unwrap",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "underlyingToken",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "wrap",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "wrappedToken",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "underlyingToken",
+          "type": "address"
+        }
+      ],
+      "name": "wrappedTokenFor",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "name": "AlreadyExists",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "TransferFromFailed",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "WrappedTokenDoesNotExist",
+      "type": "error"
+    },
+    {
+      "inputs": [],
+      "name": "WrappedTokenExists",
+      "type": "error"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "underlyingToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "wrappedToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "newUnderlyingToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "newWrappedToken",
+          "type": "address"
+        }
+      ],
+      "name": "MappingChanged",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "wrappedToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "unwrappedAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Unwrap",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "underlyingToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "internalType": "address",
+          "name": "wrappedToken",
+          "type": "address"
+        },
+        {
+          "indexed": false,
+          "internalType": "uint256",
+          "name": "wrappedAmount",
+          "type": "uint256"
+        }
+      ],
+      "name": "Wrap",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "underlyingToken",
+          "type": "address"
+        },
+        {
+          "indexed": true,
+          "internalType": "address",
+          "name": "wrappedToken",
+          "type": "address"
+        }
+      ],
+      "name": "WrappedTokenCreated",
+      "type": "event"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "underlyingToken",
+          "type": "address"
+        }
+      ],
+      "name": "createWrappedToken",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "underlying",
+          "type": "address"
+        }
+      ],
+      "name": "getUnderlyingToWrapped",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "underlyingToWrapped",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "wrappedToken",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "unwrap",
+      "outputs": [],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "account",
+          "type": "address"
+        },
+        {
+          "internalType": "address",
+          "name": "underlyingToken",
+          "type": "address"
+        },
+        {
+          "internalType": "uint256",
+          "name": "amount",
+          "type": "uint256"
+        }
+      ],
+      "name": "wrap",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "wrappedToken",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "wrappedToUnderlying",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "inputs": [
+        {
+          "internalType": "address",
+          "name": "underlyingToken",
+          "type": "address"
+        }
+      ],
+      "name": "wrappedTokenFor",
+      "outputs": [
+        {
+          "internalType": "address",
+          "name": "wrappedToken",
+          "type": "address"
+        }
+      ],
+      "stateMutability": "view",
       "type": "function"
     }
   ],

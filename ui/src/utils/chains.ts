@@ -5,7 +5,7 @@ export const CHILIZ = {
   name: chiliz.name,
   currency: chiliz.nativeCurrency.symbol,
   explorerUrl: chiliz.blockExplorers.default.url,
-  rpcUrl: chiliz.rpcUrls.default.http,
+  rpcUrl: chiliz.rpcUrls.default.http[1],
   image: "/logo/chiliz.svg",
 };
 
@@ -14,7 +14,7 @@ export const CHILIZ_SPICY = {
   name: spicy.name,
   currency: spicy.nativeCurrency.symbol,
   explorerUrl: spicy.blockExplorers.default.url,
-  rpcUrl: spicy.rpcUrls.default.http,
+  rpcUrl: spicy.rpcUrls.default.http[1],
   image: "/logo/chiliz.svg",
 };
 

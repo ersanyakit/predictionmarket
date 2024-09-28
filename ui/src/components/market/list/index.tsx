@@ -8,7 +8,7 @@ import { formatEther, parseEther } from "ethers/utils";
 import { FC, useEffect, useState } from "react";
 import ERC20_ABI from "@/contracts/abi/ERC20.json";
 import { ethers } from "ethers";
-import { getContract, parseUnits } from "viem";
+import { formatUnits, getContract, parseUnits } from "viem";
 
 
 export const MarketList: FC<any> = ({ color, className, ...rest }) => {
@@ -82,10 +82,10 @@ export const MarketList: FC<any> = ({ color, className, ...rest }) => {
                         <span>Name : {props.choice.name}</span>
                         <span>Token : {props.choice.tokenAddress}</span>
                         <span>userCount : {Number(props.choice.userCount)}</span>
-                        <span>minBet : {formatData(props.choice.minBet)}</span>
-                        <span>maxBet : {formatData(props.choice.maxBet)}</span>
-                        <span>minPrice : {formatData(props.choice.minPrice)} CHZ</span>
-                        <span>maxPrice : {formatData(props.choice.maxPrice)} CHZ</span>
+                        <span>minBet : {formatData(props.choice.minBet,0)}</span>
+                        <span>maxBet : {formatData(props.choice.maxBet,0)}</span>
+                        <span>minPrice : {formatData(props.choice.minPrice,18)} CHZ</span>
+                        <span>maxPrice : {formatData(props.choice.maxPrice,18)} CHZ</span>
 
                     </CardBody>
                     <CardFooter className="flex flex-col gap-2 p-2">
@@ -109,8 +109,8 @@ export const MarketList: FC<any> = ({ color, className, ...rest }) => {
                         <span>Valid : {props.bet.valid ? "YES" : "NO"}</span>
                         <span>BetId : {Number(props.bet.betId)}</span>
                         <span>choiceId : {Number(props.bet.choiceId)}</span>
-                        <span>price : {formatEther(props.bet.price)}</span>
-                        <span>Amount : {formatEther(props.bet.amount)}</span>
+                        <span>price : {formatUnits(props.bet.price,18)}</span>
+                        <span>Amount : {formatUnits(props.bet.amount,0)}</span>
                         <span>Created At : {unixToDateTime(props.bet.createdAt)}</span>
                         <span>Address : {props.bet.bettor}</span>
                     </div>
@@ -152,7 +152,7 @@ export const MarketList: FC<any> = ({ color, className, ...rest }) => {
                             </Tab>
                             <Tab key="voters" title="Voters">
                                 <Card>
-                                    <CardBody>
+                                    <CardBody className="flex flex-col gap-2 p-2">
                                         {
                                             props.market.bets.map((bet: any, index: number) => (
                                                 <BetItem key={index} bet={bet} marketId={props.market.id} />

@@ -14,6 +14,7 @@ event KayenRouterUpdated(address indexed previousKayenRouter, address indexed ne
 event KayenWrapperUpdated(address indexed previousKayenWrapper, address indexed newKayenWrapper);
 event NativeCurrencyUpdated(address indexed previousCurrency, address indexed newCurrency);
 event OptimisticOracleUpdated(address indexed previousOracle, address indexed newOracle);
+event OperatorStatusUpdated(address indexed user, bool isWhitelisted);
 
 function setPause(bool status) external onlyOwner{
     LibSettings.layout().isPaused = status;
@@ -79,4 +80,17 @@ function setWhiteList(address[] calldata creators,bool enabled) external onlyOwn
     }
 }
 
+
+function setOperators(address[] calldata operators,bool enabled) external onlyOwner{
+    LibSettings.Layout storage settings = LibSettings.layout();
+    uint256 length = operators.length;
+    for(uint256 i; i<length;){
+        address operator = operators[i];
+        settings.operators[operator] = enabled;
+        emit OperatorStatusUpdated(operator,enabled);
+        unchecked {
+            i++;
+        }
+    }
+}
 }

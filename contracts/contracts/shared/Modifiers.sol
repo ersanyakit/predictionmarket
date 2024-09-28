@@ -48,5 +48,10 @@ abstract contract  Modifiers is OwnableInternal,ReentrancyGuard{
         _;
     }
 
+    modifier onlyOperators(address operator){
+        if(!LibSettings.layout().operators[operator]) revert InvalidAction();
+        _;
+    }
+
    
 }

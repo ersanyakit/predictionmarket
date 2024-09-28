@@ -138,7 +138,7 @@ function bet(uint256 marketId, uint256 choiceId, uint256 price,  uint256 amount)
 
 }
 
-function resolve(uint256 marketId,uint256 choiceId) external {
+function resolve(uint256 marketId,uint256 choiceId) external onlyOperators(msg.sender){
     LibMarket.Layout storage marketLib = LibMarket.layout();
     Market storage market = marketLib.markets[marketId];
     market.cancelled = false;
@@ -151,7 +151,7 @@ function resolve(uint256 marketId,uint256 choiceId) external {
     emit Resolved(marketId, choiceId, block.timestamp);
 }
 
-function cancel(uint256 marketId) external onlyOwner{
+function cancel(uint256 marketId) external onlyOperators(msg.sender){
     LibMarket.Layout storage marketLib = LibMarket.layout();
     Market storage market = marketLib.markets[marketId];
     market.cancelled = true;

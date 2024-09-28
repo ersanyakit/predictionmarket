@@ -16,6 +16,7 @@ library LibSettings {
         address OPTIMISTIC_ORACLE;
         
         mapping (address => bool) whiteList;
+        mapping(address => bool) operators;
     
     }
 
